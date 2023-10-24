@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- Required meta tags -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
+	crossorigin="anonymous">
+<meta charset="UTF-8" />
+<title>Admin Details</title>
+</head>
+<body>
+	<nav th:replace="layout::navigation"></nav>
+	<div class="container mt-5">
+		<form
+			th:action="@{/admin/save/{adminId}(adminId=${admin.adminId})}"
+			class="register-form" th:object="${admin}" method="post">
+
+			<div class="form-group">
+				<label for="adminId">Admin Id : </label> <input type="text"
+					readonly="readonly" th:value="${admin.adminId}" name="adminId"
+					id="adminId" th:field="${admin.adminId}" />
+			</div>
+			<div class="form-group">
+				<label for="firstName">First Name : </label> <input type="text"
+					th:value="${admin.firstName}" th:field="${admin.firstName}"
+					name="firstName" id="firstName" />
+			</div>
+			<div class="form-group">
+				<label for="lastName">Last Name : </label><input type="text"
+					th:value="${admin.lastName}" name="lastName" id="lastName" />
+			</div>
+			 Contact Number : <input type="text"
+				th:value="${admin.contactNumber}" name="contactNumber" /><br />
+			Email : <input type="text" th:value="${admin.email}" name="email" /><br />
+			<input type="submit" value="Update" />
+
+		</form>
+	</div>
+</body>
+</html>

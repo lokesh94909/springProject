@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Customer Registration</title>
+
+<!-- Font Icon -->
+<link rel="stylesheet"
+	href="fonts/material-icon/css/material-design-iconic-font.min.css">
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
+	crossorigin="anonymous">
+
+
+</head>
+<body>
+	<!--Start Nav-->
+	<nav th:replace="layout::navigation"></nav>
+
+	<!--End Nav-->
+	<div class="main mt-0">
+
+		<!-- Sign up form -->
+		<section class="signup container">
+
+			<div class="signup-content">
+				<div class="signup-form">
+					<div th:if="${session.message}"
+						th:classappend="${session.message.type}" class="alert"
+						role="alert">
+						<p th:text="${session.message.content}"></p>
+						<th:block th:text="${#session.removeAttribute('message')}"></th:block>
+					</div>
+					<h2 class="form-title">Supplier Registration</h2>
+					<form method="POST" class="register-form" id="register-form"
+						th:object="${user}" th:action="@{/userRegister}">
+						<div class="form-group"></br>
+							<label for="firstName"><i
+								class="zmdi zmdi-account material-icons-name"></i></label> <input
+								type="text" name="firstName" id="firstName"
+								placeholder="First Name" th:value="${user.firstName}"
+								th:onfocusout="'validateField(this)'"
+								th:classappend="${#fields.hasErrors('firstName') ? 'is-invalid' : ''}" />
+							<div class="invalid-feedback"
+								th:each="e : ${#fields.errors('firstName')}" th:text="${e}"></div>
+						</div>
+						</br>
+						<div class="form-group">
+							<label for="lastName"><i
+								class="zmdi zmdi-account material-icons-name"></i></label> <input
+								type="text" name="lastName" id="lastName"
+								th:onblur="'validateLastName(this)'" placeholder="Last Name"
+								th:value="${user.lastName}" />
+						</div>
+						</br>
+						<div class="form-group">
+							<label for="contactNumber"><i
+								class="zmdi zmdi-account zmdi-phone"></i></label> <input type="text"
+								name="contactNumber" id="contactNumber"
+								placeholder="Contact Number" th:value="${user.contactNumber}"
+								th:onblur="'validateContact(this)'"
+								th:classappend="${#fields.hasErrors('contactNumber') ? 'is-invalid' : ''}" />
+							<div class="invalid-feedback"
+								th:each="e : ${#fields.errors('contactNumber')}" th:text="${e}"></div>
+						</div>
+						</br>
+						<div class="form-group">
+							<label for="dob"><i class="zmdi zmdi-calendar"></i></label><input
+								type="date" class="datepicker" data-date-format="mm/dd/yyyy"
+								name="dob" id="dob" placeholder="Date of Birth"
+								th:value="${user.dob}" th:blur="'validate(this)'"
+								th:classappend="${#fields.hasErrors('dob') ? 'is-invalid' : ''}" />
+							<div class="invalid-feedback"
+								th:each="e : ${#fields.errors('dob')}" th:text="${e}"></div>
+						</div>
+						</br>
+						<div class="form-group">
+							<label for="email"><i class="zmdi zmdi-email"></i></label> <input
+								type="email" name="email" id="email" placeholder="Your Email"
+								th:value="${user.email}" th:onblur="'validateField(this)'"
+								th:classappend="${#fields.hasErrors('email') ? 'is-invalid' : ''}" />
+							<div class="invalid-feedback"
+								th:each="e : ${#fields.errors('email')}" th:text="${e}"></div>
+						</div>
+						</br>
+						<div class="form-group">
+							<label for="pass"><i class="zmdi zmdi-lock"></i></label> <input
+								type="password" name="password" id="password"
+								placeholder="Password" th:onblur="'validatePassword()'"
+								th:classappend="${#fields.hasErrors('password') ? 'is-invalid' : ''}" />
+							<div class="invalid-feedback"
+								th:each="e : ${#fields.errors('password')}" th:text="${e}"></div>
+						</div>
+</br>
+
+						<div class="form-group form-button active">
+							<input type="submit" name="signup" id="signup"
+								class="form-submit" value="Register" />
+						</div>
+
+					</form>
+				</div>
+				
+				</div>
+
+			</div>
+		</section>
+
+
+	</div>
+
+	<!-- JS -->
+	<script>
+		function validateField(input) {
+			if (input.value.length < 4 || input.value.length>50) {
+		      //red border
+		      alert("name should be less than 4 and greater than 50");
+		    
+		        input.style.borderColor = "#e74c3c";
+		      
+		    } else if (input.type == "email") {
+		      console.log("this is an email type");
+		      
+		        if (input.value.indexOf("@") != -1 && input.value.indexOf(".") != -1) {
+		          //green border
+		          input.style.borderColor = "#2ecc71";
+		        } else {
+		          //red border
+		          alert("Email format is invalid");
+		          input.style.borderColor = "#e74c3c";
+		        }
+		      
+		    } else {
+		      //green border
+		        input.style.borderColor = "#2ecc71";
+		    }
+		}
+		function validateContact(input) {
+		    if(/^\d+$/.test(input)==true){
+		    	input.style.borderColor = "#e74c3c";
+		    	alert("Contact number should contain digits only");
+		    }else if (input.value.length != 10) {
+		      //red border
+		        input.style.borderColor = "#e74c3c";
+		        alert('Contact number should be exactly 10 digits');
+		      }
+		    else {
+		      //green border
+		        input.style.borderColor = "#2ecc71";
+		    }
+		}
+		function validateLastName(input) {
+		    if (input.value.length == '') {
+		      //red border
+		        input.style.borderColor = "#e74c3c";
+		        
+		        
+		      
+		    }else {
+		      //green border
+		        input.style.borderColor = "#2ecc71";
+		    }
+		}
+		
+		function validatePassword() {
+		    var newPassword = document.getElementById('password').value;
+		    var minNumberofChars = 6;
+		    var maxNumberofChars = 16;
+		    var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+		    if(newPassword.length < minNumberofChars){
+		    	alert('password should have length more than 6 letter');
+		    	document.getElementById('password').style.borderColor = "#e74c3c";
+		        return false;
+		    }
+		    if(!regularExpression.test(newPassword)) {
+		        alert("password should contain atleast one number and one special character");
+		        document.getElementById('password').style.borderColor = "#e74c3c";
+		        return false;
+		    }
+		    document.getElementById('password').style.borderColor = "#2ecc71";
+		}
+		function validate(date){
+		    var eighteenYearsAgo = moment().subtract(18, "years");
+		    var birthday = moment(date.value);
+		
+		    
+		    if (eighteenYearsAgo.isAfter(birthday)) {
+		        date.style.borderColor = "#2ecc71"; 
+		    }
+		    else {
+		        alert("You are not 18 years old");  
+		    }
+		}
+	</script>
+	<script
+		src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.4.0/moment.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+		crossorigin="anonymous"></script>
+</body>
+</html>
